@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giving Assistant — Syracuse University</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --su-navy: #0e1f45;
+      --su-orange: #f76900;
+      --su-orange-light: #fff3eb;
+      --su-navy-light: #e8ecf4;
+      --text-primary: #0e1f45;
+      --text-secondary: #5a6475;
+      --text-muted: #9aa0ad;
+      --border: #e2e6ed;
+      --white: #ffffff;
+      --chat-bg: #f7f8fa;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--chat-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: var(--su-navy);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      flex-shrink: 0;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-logo {
+      width: 28px;
+      height: 28px;
+    }
+
+    .header-name {
+      font-family: 'Source Serif 4', serif;
+      font-weight: 400;
+      font-size: 17px;
+      color: var(--white);
+      letter-spacing: 0.01em;
+    }
+
+    .header-badge {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--su-orange);
+      background: rgba(247,105,0,0.15);
+      border: 1px solid rgba(247,105,0,0.3);
+      border-radius: 4px;
+      padding: 2px 7px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+    }
+
+    /* Main layout */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 1.5rem;
+      gap: 0;
+    }
+
+    /* Intro */
+    .intro {
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .intro-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--su-orange);
+      margin-bottom: 6px;
+    }
+
+    .intro-heading {
+      font-family: 'Source Serif 4', serif;
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 300;
+      color: var(--su-navy);
+      line-height: 1.3;
+    }
+
+    /* Chat window */
+    #chat-window {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 480px;
+      overflow: hidden;
+      animation: fadeUp 0.5s 0.1s ease both;
+      box-shadow: 0 2px 12px rgba(14,31,69,0.06);
+    }
+
+    /* Messages */
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    #messages::-webkit-scrollbar { width: 4px; }
+    #messages::-webkit-scrollbar-track { background: transparent; }
+    #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .msg-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      animation: fadeUp 0.3s ease both;
+    }
+
+    .msg-row.user { flex-direction: row-reverse; }
+
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .avatar.assistant {
+      background: var(--su-navy);
+      color: var(--white);
+    }
+
+    .avatar.user {
+      background: var(--su-orange-light);
+      color: var(--su-orange);
+    }
+
+    .bubble {
+      max-width: 82%;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      font-size: 14.5px;
+      line-height: 1.65;
+      color: var(--text-primary);
+    }
+
+    .bubble.assistant {
+      background: var(--chat-bg);
+      border: 1px solid var(--border);
+      border-top-left-radius: 4px;
+    }
+
+    .bubble.user {
+      background: var(--su-navy);
+      color: var(--white);
+      border-top-right-radius: 4px;
+    }
+
+    .bubble a {
+      color: var(--su-orange);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .bubble strong { font-weight: 500; }
+
+    /* Chips */
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--su-navy);
+      font-size: 13px;
+      font-weight: 400;
+      cursor: pointer;
+      background: var(--white);
+      color: var(--su-navy);
+      transition: all 0.15s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .chip:hover {
+      background: var(--su-navy);
+      color: var(--white);
+    }
+
+    .chip.orange {
+      border-color: var(--su-orange);
+      color: var(--su-orange);
+    }
+
+    .chip.orange:hover {
+      background: var(--su-orange);
+      color: var(--white);
+    }
+
+    /* Typing indicator */
+    .typing-bubble {
+      background: var(--chat-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      border-top-left-radius: 4px;
+      padding: 12px 16px;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      animation: bounce 1.2s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+
+    /* Input area */
+    #input-area {
+      border-top: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      background: var(--white);
+    }
+
+    #user-input {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-primary);
+      background: var(--chat-bg);
+      resize: none;
+      max-height: 120px;
+      line-height: 1.5;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    #user-input:focus { border-color: var(--su-navy); }
+    #user-input::placeholder { color: var(--text-muted); }
+
+    #send-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: var(--su-navy);
+      color: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    #send-btn:hover { background: var(--su-orange); }
+    #send-btn:active { transform: scale(0.96); }
+    #send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    #send-btn svg { width: 16px; height: 16px; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 11px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <!-- SU Block S SVG -->
+    <svg class="header-logo" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="28" height="28" rx="4" fill="#f76900"/>
+      <text x="14" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="white">S</text>
+    </svg>
+    <span class="header-name">Giving Assistant</span>
+    <span class="header-badge">Prototype</span>
+  </div>
+  <div class="header-right">Syracuse University</div>
+</header>
+
+<main>
+  <div class="intro">
+    <div class="intro-eyebrow">AI-powered fund discovery</div>
+    <h1 class="intro-heading">Find the right fund for your gift.</h1>
+  </div>
+
+  <div id="chat-window">
+    <div id="messages"></div>
+    <div id="input-area">
+      <textarea id="user-input" rows="1" placeholder="Type a message..."></textarea>
+      <button id="send-btn" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Giving Assistant is an AI tool. Fund recommendations are suggestions only. &nbsp;·&nbsp; Syracuse University
+</footer>
+
+<script>
+  const SUPABASE_URL = 'https://yrraeytecqnjjtnhwzkb.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlycmFleXRlY3Fuamp0bmh3emtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMDE3NTQsImV4cCI6MjA5MTY3Nzc1NH0.bqL1Z-7wPTLlmBfmS_fKmqUPdVIUGs8OZnGUha2IKK0';
+  const EDGE_FN_URL = 'https://yrraeytecqnjjtnhwzkb.supabase.co/functions/v1/chat';
+  const HANDOFF_URL = 'https://secure.syr.edu/s/1632/17/form/form.aspx?sid=1632&gid=2&pgid=436&cid=1161';
+
+  let funds = [];
+  let history = [];
+  let userIntent = null; // 'affinity' or 'cause'
+
+  async function loadFunds() {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/funds?select=fund_name,category,description`, {
+      headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` }
+    });
+    funds = await res.json();
+  }
+
+  loadFunds();
+
+  // ── Render helpers ──────────────────────────────────────────────
+
+  function addMessage(role, html, chips) {
+    const msgs = document.getElementById('messages');
+    const row = document.createElement('div');
+    row.className = `msg-row ${role}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = `avatar ${role}`;
+    avatar.textContent = role === 'assistant' ? 'GA' : 'You';
+
+    const bubble = document.createElement('div');
+    bubble.className = `bubble ${role}`;
+
+    const content = document.createElement('div');
+    content.innerHTML = html;
+    bubble.appendChild(content);
+
+    if (chips && chips.length) {
+      const group = document.createElement('div');
+      group.className = 'chip-group';
+      chips.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'chip' + (c.orange ? ' orange' : '');
+        btn.textContent = c.label;
+        btn.onclick = () => handleChip(c.value || c.label, c.intent);
+        group.appendChild(btn);
+      });
+      bubble.appendChild(group);
+    }
+
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    msgs.appendChild(row);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function showTyping() {
+    const msgs = document.getElementById('messages');
+    const row = document.createElement('div');
+    row.className = 'msg-row assistant';
+    row.id = 'typing-row';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar assistant';
+    avatar.textContent = 'GA';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'typing-bubble';
+    bubble.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    msgs.appendChild(row);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typing-row');
+    if (t) t.remove();
+  }
+
+  function formatReply(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\[(.*?)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+      .replace(/\n/g, '<br>');
+  }
+
+  // ── Conversation flow ───────────────────────────────────────────
+
+  function startConversation() {
+    addMessage('assistant',
+      'Every gift starts with something that matters to you. What motivates you to give today?',
+      [
+        { label: 'My SU school(s), program(s), or team(s)', intent: 'affinity' },
+        { label: 'A cause that I care about', intent: 'cause' }
+      ]
+    );
+  }
+
+  function handleChip(value, intent) {
+    if (intent === 'affinity' || intent === 'cause') {
+      userIntent = intent;
+      addMessage('user', value);
+      history.push({ role: 'user', content: value });
+
+      setTimeout(() => {
+        if (intent === 'affinity') {
+          addMessage('assistant', 'Which school(s), program(s), or team(s) were you part of?');
+          history.push({ role: 'assistant', content: 'Which school(s), program(s), or team(s) were you part of?' });
+        } else {
+          addMessage('assistant', 'Tell me what you care about — I\'ll find the funds that match.');
+          history.push({ role: 'assistant', content: 'Tell me what you care about — I\'ll find the funds that match.' });
+        }
+      }, 400);
+    } else {
+      // "Show me 3 more" or other dynamic chips
+      sendMessage(value);
+    }
+  }
+
+  // ── API call ────────────────────────────────────────────────────
+
+  async function sendMessage(text) {
+    const btn = document.getElementById('send-btn');
+    btn.disabled = true;
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+    showTyping();
+
+    const fundContext = funds.map(f =>
+      `Fund: ${f.fund_name}\nCategory: ${f.category}\nDescription: ${f.description}`
+    ).join('\n\n');
+
+    const intentNote = userIntent === 'affinity'
+      ? 'This donor is giving based on personal affiliation with an SU school, program, or team. Prioritize funds in categories that match what they named.'
+      : 'This donor is giving based on a cause or value they care about. Match across all categories based on mission alignment.';
+
+    const systemPrompt = `You are Giving Assistant, a warm and knowledgeable AI chatbot for Syracuse University donors. Your job is to listen carefully and recommend funds that genuinely match what the donor cares about.
+
+${intentNote}
+
+Here is the complete fund database:
+${fundContext}
+
+Guidelines:
+- Recommend exactly 3 funds that best match the donor's input
+- For each fund, bold the name and write one warm sentence explaining why it fits
+- Number each recommendation (1. 2. 3.)
+- After the 3 recommendations, ask: "Would you like to see three more options, or does one of these feel right?"
+- If the donor says yes to more, recommend 3 different funds they haven't seen yet
+- When the donor seems ready to give or picks a fund, warmly encourage them and include this link as "Make your gift to Syracuse University": ${HANDOFF_URL}
+- Never recommend the same fund twice in a conversation
+- Keep responses warm, concise, and donor-focused`;
+
+    try {
+      const res = await fetch(EDGE_FN_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON}`
+        },
+        body: JSON.stringify({ messages: history, systemPrompt })
+      });
+
+      const data = await res.json();
+      const reply = data.content.map(b => b.text || '').join('');
+      history.push({ role: 'assistant', content: reply });
+      removeTyping();
+
+      const wantsMore = reply.toLowerCase().includes('three more') || reply.toLowerCase().includes('3 more');
+      const chips = wantsMore ? [
+        { label: 'Yes, show me three more', value: 'Yes, please show me three more options.' },
+        { label: 'One of these feels right', value: 'One of these feels right — help me give.' }
+      ] : [];
+
+      addMessage('assistant', formatReply(reply), chips);
+
+    } catch (e) {
+      removeTyping();
+      addMessage('assistant', 'Something went wrong — please try again in a moment.');
+    }
+
+    btn.disabled = false;
+    document.getElementById('user-input').focus();
+  }
+
+  // ── Input handling ──────────────────────────────────────────────
+
+  function handleSend() {
+    const input = document.getElementById('user-input');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    input.style.height = 'auto';
+    sendMessage(text);
+  }
+
+  document.getElementById('send-btn').addEventListener('click', handleSend);
+
+  document.getElementById('user-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  });
+
+  document.getElementById('user-input').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+
+  // ── Init ────────────────────────────────────────────────────────
+  startConversation();
+</script>
+</body>
+</html>
