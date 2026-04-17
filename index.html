@@ -216,9 +216,15 @@
       line-height: 1.6;
     }
 
+    .fund-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
     .fund-card-btn {
       display: inline-block;
-      margin-top: 4px;
       padding: 8px 16px;
       background: var(--su-orange);
       color: var(--white);
@@ -228,10 +234,20 @@
       border-radius: var(--radius-sm);
       text-decoration: none;
       transition: background 0.15s ease;
-      align-self: flex-start;
     }
 
     .fund-card-btn:hover { background: #d95e00; }
+
+    .fund-card-btn.secondary {
+      background: transparent;
+      color: var(--su-navy);
+      border: 1.5px solid var(--border);
+    }
+
+    .fund-card-btn.secondary:hover {
+      background: var(--chat-bg);
+      border-color: var(--su-navy);
+    }
 
     /* Chips */
     .chip-group {
@@ -291,6 +307,19 @@
       gap: 8px;
       align-items: flex-end;
       background: var(--white);
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-top-width: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease, border-top-width 0.4s ease;
+    }
+
+    #input-area.visible {
+      max-height: 100px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      border-top-width: 1px;
     }
 
     #user-input {
@@ -460,15 +489,26 @@
       desc.className = 'fund-card-desc';
       desc.textContent = rec.reason;
 
-      const btn = document.createElement('a');
-      btn.className = 'fund-card-btn';
-      btn.href = HANDOFF_URL;
-      btn.target = '_blank';
-      btn.textContent = 'Make a Gift';
+      const actions = document.createElement('div');
+      actions.className = 'fund-card-actions';
 
+      const giftBtn = document.createElement('a');
+      giftBtn.className = 'fund-card-btn';
+      giftBtn.href = HANDOFF_URL;
+      giftBtn.target = '_blank';
+      giftBtn.textContent = 'Make a Gift';
+
+      const learnBtn = document.createElement('a');
+      learnBtn.className = 'fund-card-btn secondary';
+      learnBtn.href = 'https://www.syracuse.edu';
+      learnBtn.target = '_blank';
+      learnBtn.textContent = 'Learn More';
+
+      actions.appendChild(giftBtn);
+      actions.appendChild(learnBtn);
       card.appendChild(name);
       card.appendChild(desc);
-      card.appendChild(btn);
+      card.appendChild(actions);
       col.appendChild(card);
     });
 
@@ -531,6 +571,7 @@
   function handleChip(value, intent) {
     if (intent === 'affinity' || intent === 'cause') {
       userIntent = intent;
+      document.getElementById('input-area').classList.add('visible');
       addMessage('user', value);
       history.push({ role: 'user', content: value });
 
@@ -625,8 +666,7 @@ Rules:
       }
 
       const chips = parsed.show_more_chips ? [
-        { label: 'Show me three more options', value: 'Yes, please show me three more different options.' },
-        { label: 'One of these feels right', value: 'One of these feels right.' }
+        { label: 'Show me three more options', value: 'Yes, please show me three more different options.' }
       ] : [];
 
       addCards(parsed.recommendations, chips);
