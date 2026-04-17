@@ -4,114 +4,366 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Giving Assistant — Syracuse University</title>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
+    @font-face {
+      font-family: 'Sherman Sans';
+      src: url('fonts/ShermanSans-Book.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Sherman Sans';
+      src: url('fonts/ShermanSans-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Sherman Serif';
+      src: url('fonts/ShermanSerif-Book.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html { scroll-behavior: smooth; }
+
     :root {
-      --su-navy: #0e1f45;
-      --su-orange: #f76900;
+      --su-navy: #0D1B40;
+      --su-orange: #F76900;
+      --su-orange-hover: #d95e00;
       --su-orange-light: #fff3eb;
-      --text-primary: #0e1f45;
+      --text-primary: #0D1B40;
       --text-secondary: #5a6475;
       --text-muted: #9aa0ad;
       --border: #e2e6ed;
       --white: #ffffff;
       --chat-bg: #f7f8fa;
+      --section-gray: #eef0f4;
       --radius: 12px;
       --radius-sm: 8px;
+      --nav-h: 56px;
     }
 
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--chat-bg);
+      font-family: 'Sherman Sans', system-ui, sans-serif;
+      background: var(--white);
       color: var(--text-primary);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      line-height: 1.5;
     }
 
-    header {
+    /* —— Sticky nav —— */
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: var(--nav-h);
       background: var(--su-navy);
-      padding: 0 2rem;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      height: 56px;
+      padding: 0 1.25rem 0 1.5rem;
+      box-shadow: 0 2px 12px rgba(13, 27, 64, 0.25);
+    }
+
+    .site-nav .brand-logo {
+      display: block;
+      height: 36px;
+      width: auto;
+    }
+
+    /* —— Hero —— */
+    .hero {
+      position: relative;
+      margin-top: var(--nav-h);
+      min-height: min(88vh, 720px);
+      background: var(--su-navy);
+      color: var(--white);
+      overflow: hidden;
+    }
+
+    .hero-starfield {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(2.5rem, 6vw, 4.5rem) 1.5rem clamp(3rem, 8vw, 5rem);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .hero-inner {
+        grid-template-columns: 1fr minmax(260px, 38%);
+        gap: 3rem;
+      }
+    }
+
+    .hero-copy { max-width: 640px; }
+
+    .hero-title {
+      font-family: 'Sherman Serif', 'Georgia', serif;
+      font-size: clamp(1.85rem, 4.5vw, 2.75rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-sub {
+      font-family: 'Sherman Sans', sans-serif;
+      font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+      font-weight: 700;
+      color: var(--su-orange);
+      margin-bottom: 1rem;
+      line-height: 1.35;
+    }
+
+    .hero-desc {
+      font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.65;
+      margin-bottom: 1.75rem;
+      max-width: 52ch;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.85rem 1.5rem;
+      background: var(--su-orange);
+      color: var(--white);
+      font-family: 'Sherman Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+      box-shadow: 0 4px 20px rgba(247, 105, 0, 0.35);
+    }
+
+    .btn-cta:hover {
+      background: var(--su-orange-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-cta:active { transform: translateY(0); }
+
+    .hero-mascot {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    @media (min-width: 900px) {
+      .hero-mascot { justify-content: flex-end; }
+    }
+
+    .hero-mascot img {
+      width: min(100%, 340px);
+      height: auto;
+      max-height: min(52vh, 420px);
+      object-fit: contain;
+      filter: drop-shadow(0 0 28px rgba(255, 230, 180, 0.35));
+    }
+
+    /* —— Sections —— */
+    .section {
+      padding: clamp(3rem, 6vw, 4.5rem) 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-heading {
+      font-family: 'Sherman Serif', 'Georgia', serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 400;
+      color: var(--su-navy);
+      margin-bottom: 1.5rem;
+      line-height: 1.25;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin-top: -0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .bg-gray { background: var(--section-gray); }
+    .bg-white { background: var(--white); }
+
+    /* Problem stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (min-width: 700px) {
+      .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    }
+
+    .stat-card {
+      text-align: left;
+    }
+
+    .stat-num {
+      font-family: 'Sherman Sans', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 3.25rem);
+      font-weight: 700;
+      color: var(--su-navy);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-num span { color: var(--su-orange); }
+
+    .stat-label {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      max-width: 28ch;
+    }
+
+    .problem-body {
+      font-size: 1rem;
+      color: var(--text-primary);
+      line-height: 1.7;
+      max-width: 75ch;
+      margin-bottom: 1rem;
+    }
+
+    .source-line {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Feature cards */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .feature-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .feature-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.35rem;
+      box-shadow: 0 2px 12px rgba(13, 27, 64, 0.06);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 6px 24px rgba(13, 27, 64, 0.1);
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 1rem;
+      color: var(--su-orange);
+    }
+
+    .feature-card h3 {
+      font-family: 'Sherman Sans', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--su-navy);
+      margin-bottom: 0.5rem;
+      line-height: 1.35;
+    }
+
+    .feature-card p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* —— Chat section —— */
+    .chat-section-intro {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .chat-section-intro .section-heading { margin-bottom: 0.35rem; }
+    .chat-section-intro .section-sub { margin-bottom: 0; }
+
+    .chat-panel {
+      max-width: 720px;
+      margin: 0 auto;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 32px rgba(13, 27, 64, 0.12);
+      background: var(--white);
+    }
+
+    .chat-panel-header {
+      background: var(--su-navy);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 1rem;
+      min-height: 52px;
+    }
+
+    .chat-panel-header img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      border-radius: 50%;
       flex-shrink: 0;
     }
 
-    .header-brand { display: flex; align-items: center; gap: 10px; }
-
-    .header-name {
-      font-family: 'Source Serif 4', serif;
-      font-weight: 400;
-      font-size: 17px;
-      color: var(--white);
-      letter-spacing: 0.01em;
+    .chat-panel-header span {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
     }
 
-    .header-badge {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--su-orange);
-      background: rgba(247,105,0,0.15);
-      border: 1px solid rgba(247,105,0,0.3);
-      border-radius: 4px;
-      padding: 2px 7px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .header-right {
-      font-size: 12px;
-      color: rgba(255,255,255,0.45);
-      font-weight: 300;
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      max-width: 720px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 1.5rem;
-    }
-
-    .intro {
-      margin-bottom: 1.5rem;
-      animation: fadeUp 0.5s ease both;
-    }
-
-    .intro-eyebrow {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--su-orange);
-      margin-bottom: 6px;
-    }
-
-    .intro-heading {
-      font-family: 'Source Serif 4', serif;
-      font-size: clamp(22px, 4vw, 30px);
-      font-weight: 300;
-      color: var(--su-navy);
-      line-height: 1.3;
+    .chat-panel-body {
+      background: var(--white);
     }
 
     #chat-window {
       background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: none;
+      border-radius: 0;
       display: flex;
       flex-direction: column;
-      flex: 1;
       min-height: 520px;
       overflow: hidden;
-      animation: fadeUp 0.5s 0.1s ease both;
-      box-shadow: 0 2px 12px rgba(14,31,69,0.06);
     }
 
     #messages {
@@ -122,6 +374,7 @@
       flex-direction: column;
       gap: 16px;
       scroll-behavior: smooth;
+      background: var(--white);
     }
 
     #messages::-webkit-scrollbar { width: 4px; }
@@ -145,12 +398,27 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
-      font-weight: 500;
+      font-size: 10px;
+      font-weight: 700;
+      overflow: hidden;
     }
 
-    .avatar.assistant { background: var(--su-navy); color: var(--white); }
-    .avatar.user { background: var(--su-orange-light); color: var(--su-orange); }
+    .avatar.assistant {
+      background: var(--su-navy);
+      color: var(--white);
+      padding: 0;
+    }
+
+    .avatar.assistant img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar.user {
+      background: var(--su-orange-light);
+      color: var(--su-orange);
+    }
 
     .bubble {
       max-width: 82%;
@@ -173,7 +441,6 @@
       border-top-right-radius: 4px;
     }
 
-    /* Cards */
     .cards-row {
       display: flex;
       gap: 10px;
@@ -200,11 +467,11 @@
     }
 
     .fund-card:hover {
-      box-shadow: 0 4px 16px rgba(14,31,69,0.1);
+      box-shadow: 0 4px 16px rgba(13, 27, 64, 0.1);
     }
 
     .fund-card-name {
-      font-weight: 500;
+      font-weight: 700;
       font-size: 15px;
       color: var(--su-navy);
       line-height: 1.3;
@@ -228,15 +495,15 @@
       padding: 8px 16px;
       background: var(--su-orange);
       color: var(--white);
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Sherman Sans', sans-serif;
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 700;
       border-radius: var(--radius-sm);
       text-decoration: none;
       transition: background 0.15s ease;
     }
 
-    .fund-card-btn:hover { background: #d95e00; }
+    .fund-card-btn:hover { background: var(--su-orange-hover); }
 
     .fund-card-btn.secondary {
       background: transparent;
@@ -249,7 +516,6 @@
       border-color: var(--su-navy);
     }
 
-    /* Chips */
     .chip-group {
       display: flex;
       flex-wrap: wrap;
@@ -267,14 +533,23 @@
       background: var(--white);
       color: var(--su-navy);
       transition: all 0.15s ease;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Sherman Sans', sans-serif;
     }
 
-    .chip:hover { background: var(--su-navy); color: var(--white); }
+    .chip:hover:not(:disabled) { background: var(--su-navy); color: var(--white); }
     .chip.orange { border-color: var(--su-orange); color: var(--su-orange); }
-    .chip.orange:hover { background: var(--su-orange); color: var(--white); }
+    .chip.orange:hover:not(:disabled) { background: var(--su-orange); color: var(--white); }
 
-    /* Typing */
+    .chip:disabled,
+    .chip.chip-used {
+      opacity: 0.45;
+      cursor: default;
+      pointer-events: none;
+      background: #e8eaef;
+      border-color: #c5cad4;
+      color: var(--text-muted);
+    }
+
     .typing-bubble {
       background: var(--chat-bg);
       border: 1px solid var(--border);
@@ -328,7 +603,7 @@
       border-radius: var(--radius-sm);
       padding: 10px 14px;
       font-size: 14px;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Sherman Sans', sans-serif;
       color: var(--text-primary);
       background: var(--chat-bg);
       resize: none;
@@ -345,7 +620,7 @@
       width: 38px; height: 38px;
       border-radius: var(--radius-sm);
       border: none;
-      background: var(--su-navy);
+      background: var(--su-orange);
       color: var(--white);
       cursor: pointer;
       display: flex;
@@ -355,18 +630,47 @@
       transition: background 0.15s, transform 0.1s;
     }
 
-    #send-btn:hover { background: var(--su-orange); }
+    #send-btn:hover { background: var(--su-orange-hover); }
     #send-btn:active { transform: scale(0.96); }
     #send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
     #send-btn svg { width: 16px; height: 16px; }
 
-    footer {
-      text-align: center;
-      padding: 1rem;
+    .chat-disclaimer {
+      padding: 0.65rem 1rem 0.85rem;
       font-size: 11px;
+      line-height: 1.45;
       color: var(--text-muted);
-      flex-shrink: 0;
+      background: var(--chat-bg);
+      border-top: 1px solid var(--border);
+      text-align: center;
     }
+
+    /* —— Site footer —— */
+    .site-footer {
+      background: var(--su-navy);
+      color: rgba(255, 255, 255, 0.85);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .site-footer p { margin-bottom: 0.75rem; }
+
+    .site-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem 1.25rem;
+    }
+
+    .site-footer a {
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .site-footer a:hover { color: var(--su-orange); }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(8px); }
@@ -376,43 +680,206 @@
 </head>
 <body>
 
-<header>
-  <div class="header-brand">
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="28" height="28" rx="4" fill="#f76900"/>
-      <text x="14" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="white">S</text>
-    </svg>
-    <span class="header-name">Giving Assistant</span>
-    <span class="header-badge">Prototype</span>
-  </div>
-  <div class="header-right">Syracuse University</div>
-</header>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="#" aria-label="Syracuse University home">
+      <img class="brand-logo" src="assets/block-s-white.svg" width="36" height="50" alt="Syracuse University" />
+    </a>
+  </nav>
 
-<main>
-  <div class="intro">
-    <div class="intro-eyebrow">AI-powered fund discovery</div>
-    <h1 class="intro-heading">Find the right fund for your gift.</h1>
-  </div>
-
-  <div id="chat-window">
-    <div id="messages"></div>
-    <div id="input-area">
-      <textarea id="user-input" rows="1" placeholder="Type a message..."></textarea>
-      <button id="send-btn" aria-label="Send">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"></line>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-        </svg>
-      </button>
+  <section class="hero" aria-labelledby="hero-title">
+    <canvas class="hero-starfield" id="hero-starfield" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <h1 id="hero-title" class="hero-title">Meet Clementine's New Giving Assistant</h1>
+        <p class="hero-sub">Every gift starts with something that matters to you.</p>
+        <p class="hero-desc">
+          Giving Assistant uses AI to match donors with Syracuse University funds that reflect their values, affiliations, and passions
+          — making it easier than ever to find the right place for your gift.
+        </p>
+        <a class="btn-cta" href="#try-giving-assistant">Explore Giving Assistant</a>
+      </div>
+      <div class="hero-mascot">
+        <img
+          src="assets/clementine-mascot.png"
+          alt="Clementine mascot"
+          width="340"
+          height="374"
+          onerror="this.onerror=null;this.src='assets/clementine-mascot.svg';"
+        />
+      </div>
     </div>
-  </div>
-</main>
+  </section>
 
-<footer>
-  Giving Assistant is an AI tool. Fund recommendations are suggestions only. &nbsp;·&nbsp; Syracuse University
-</footer>
+  <section class="section bg-gray" aria-labelledby="problem-heading">
+    <div class="section-inner">
+      <h2 id="problem-heading" class="section-heading">Why Giving Assistant? Why Now?</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num"><span>42%</span></div>
+          <p class="stat-label">of alumni don't see their institution as a philanthropic priority</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num"><span>68%</span></div>
+          <p class="stat-label">of alumni don't feel their philanthropic priorities are known by their alma mater</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num"><span>13%</span></div>
+          <p class="stat-label">of Millennial and Gen Z alumni gave to higher education last year</p>
+        </div>
+      </div>
+      <p class="problem-body">
+        Alumni are generous — they're just giving elsewhere. The 2026 National Alumni Survey found that alumni increasingly give based on values and personal
+        connection, not loyalty or obligation. Giving Assistant is built for this moment.
+      </p>
+      <p class="source-line">Source: 2026 National Alumni Survey</p>
+    </div>
+  </section>
+
+  <section class="section bg-white" aria-labelledby="features-heading">
+    <div class="section-inner">
+      <h2 id="features-heading" class="section-heading">What Giving Assistant Does</h2>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="10" width="32" height="24" rx="4" stroke="currentColor" stroke-width="2"/>
+            <path d="M16 22h16M16 28h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="34" cy="34" r="6" fill="currentColor" opacity="0.25"/>
+          </svg>
+          <h3>Listens Before It Asks</h3>
+          <p>Instead of presenting a generic fund list, Giving Assistant starts with a conversation, understanding what the donor cares about before making any recommendation.</p>
+        </article>
+        <article class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="22" cy="22" r="12" stroke="currentColor" stroke-width="2"/>
+            <path d="M32 32l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="22" cy="22" r="4" fill="currentColor" opacity="0.35"/>
+          </svg>
+          <h3>Values-Matched Fund Discovery</h3>
+          <p>Using natural language AI, Giving Assistant reasons across 100+ Syracuse University funds to surface the ones that genuinely align with each donor's interests and affiliations.</p>
+        </article>
+        <article class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M10 36V12l14-6 14 6v24" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M24 18v18M18 30h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3>Two Paths to Giving</h3>
+          <p>Donors can explore funds through personal affiliation (school, program, or team) or cause-based giving — meeting them where they are.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="try-giving-assistant" class="section bg-gray" aria-labelledby="chat-heading">
+    <div class="section-inner">
+      <div class="chat-section-intro">
+        <h2 id="chat-heading" class="section-heading">Try It Yourself</h2>
+        <p class="section-sub">Ask Giving Assistant to help you find your fund.</p>
+      </div>
+
+      <div class="chat-panel">
+        <div class="chat-panel-header">
+          <img
+            src="assets/clementine-mascot.png"
+            alt=""
+            width="32"
+            height="32"
+            onerror="this.onerror=null;this.src='assets/clementine-mascot.svg';"
+          />
+          <span>Giving Assistant</span>
+        </div>
+        <div class="chat-panel-body">
+          <div id="chat-window">
+            <div id="messages"></div>
+            <div id="input-area">
+              <textarea id="user-input" rows="1" placeholder="Type a message..."></textarea>
+              <button type="button" id="send-btn" aria-label="Send">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <p class="chat-disclaimer">
+          Giving Assistant is AI and capable of making mistakes. Fund recommendations are suggestions only.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Giving Assistant · A proposed addition to the Clementine platform · Syracuse University</p>
+    <div class="site-footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">IT Policies</a>
+    </div>
+  </footer>
 
 <script>
+  (function initStarfield() {
+    const canvas = document.getElementById('hero-starfield');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    let w = 0, h = 0;
+
+    function resize() {
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      const rect = parent.getBoundingClientRect();
+      w = canvas.width = Math.floor(rect.width);
+      h = canvas.height = Math.floor(rect.height);
+      const count = Math.min(120, Math.floor((w * h) / 9000));
+      stars = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.1 + 0.25,
+        tw: Math.random() * Math.PI * 2,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: (Math.random() - 0.5) * 0.12
+      }));
+    }
+
+    function tick(t) {
+      ctx.clearRect(0, 0, w, h);
+      stars.forEach(s => {
+        s.tw += 0.018;
+        s.x += s.vx;
+        s.y += s.vy;
+        if (s.x < 0) s.x += w; else if (s.x > w) s.x -= w;
+        if (s.y < 0) s.y += h; else if (s.y > h) s.y -= h;
+        const a = 0.25 + Math.sin(s.tw) * 0.35;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + a.toFixed(3) + ')';
+        ctx.fill();
+      });
+      requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(tick);
+  })();
+
+  const MASCOT_SRC_PNG = 'assets/clementine-mascot.png';
+  const MASCOT_SRC_SVG = 'assets/clementine-mascot.svg';
+
+  function assistantAvatarEl() {
+    const img = document.createElement('img');
+    img.className = 'avatar assistant';
+    img.alt = '';
+    img.width = 30;
+    img.height = 30;
+    img.src = MASCOT_SRC_PNG;
+    img.onerror = function () {
+      this.onerror = null;
+      this.src = MASCOT_SRC_SVG;
+    };
+    return img;
+  }
+
   const SUPABASE_URL = 'https://yrraeytecqnjjtnhwzkb.supabase.co';
   const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlycmFleXRlY3Fuamp0bmh3emtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMDE3NTQsImV4cCI6MjA5MTY3Nzc1NH0.bqL1Z-7wPTLlmBfmS_fKmqUPdVIUGs8OZnGUha2IKK0';
   const EDGE_FN_URL = 'https://yrraeytecqnjjtnhwzkb.supabase.co/functions/v1/chat';
@@ -423,37 +890,51 @@
   let userIntent = null;
 
   async function loadFunds() {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/funds?select=fund_name,category,description`, {
-      headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` }
+    const res = await fetch(SUPABASE_URL + '/rest/v1/funds?select=fund_name,category,description', {
+      headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON }
     });
     funds = await res.json();
   }
 
   loadFunds();
 
-  // ── Render helpers ──────────────────────────────────────────────
+  function disableChipGroup(chipBtn) {
+    if (!chipBtn) return;
+    var group = chipBtn.closest('.chip-group');
+    if (!group) return;
+    group.querySelectorAll('button.chip').forEach(function (b) {
+      b.disabled = true;
+      b.classList.add('chip-used');
+    });
+  }
 
   function addMessage(role, html, chips) {
     const msgs = document.getElementById('messages');
     const row = document.createElement('div');
-    row.className = `msg-row ${role}`;
+    row.className = 'msg-row ' + role;
 
-    const avatar = document.createElement('div');
-    avatar.className = `avatar ${role}`;
-    avatar.textContent = role === 'assistant' ? 'GA' : 'You';
+    const avatar = role === 'assistant' ? assistantAvatarEl() : (function () {
+      const a = document.createElement('div');
+      a.className = 'avatar user';
+      a.textContent = 'You';
+      return a;
+    })();
 
     const bubble = document.createElement('div');
-    bubble.className = `bubble ${role}`;
+    bubble.className = 'bubble ' + role;
     bubble.innerHTML = html;
 
     if (chips && chips.length) {
       const group = document.createElement('div');
       group.className = 'chip-group';
-      chips.forEach(c => {
+      chips.forEach(function (c) {
         const btn = document.createElement('button');
+        btn.type = 'button';
         btn.className = 'chip' + (c.orange ? ' orange' : '');
         btn.textContent = c.label;
-        btn.onclick = () => handleChip(c.value || c.label, c.intent);
+        btn.onclick = function (e) {
+          handleChip(c.value || c.label, c.intent, e.currentTarget);
+        };
         group.appendChild(btn);
       });
       bubble.appendChild(group);
@@ -470,14 +951,12 @@
     const row = document.createElement('div');
     row.className = 'cards-row';
 
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar assistant';
-    avatar.textContent = 'GA';
+    const avatar = assistantAvatarEl();
 
     const col = document.createElement('div');
     col.className = 'cards-col';
 
-    recommendations.forEach(rec => {
+    recommendations.forEach(function (rec) {
       const card = document.createElement('div');
       card.className = 'fund-card';
 
@@ -496,12 +975,14 @@
       giftBtn.className = 'fund-card-btn';
       giftBtn.href = HANDOFF_URL;
       giftBtn.target = '_blank';
+      giftBtn.rel = 'noopener noreferrer';
       giftBtn.textContent = 'Make a Gift';
 
       const learnBtn = document.createElement('a');
       learnBtn.className = 'fund-card-btn secondary';
       learnBtn.href = 'https://www.syracuse.edu';
       learnBtn.target = '_blank';
+      learnBtn.rel = 'noopener noreferrer';
       learnBtn.textContent = 'Learn More';
 
       actions.appendChild(giftBtn);
@@ -515,11 +996,14 @@
     if (followUpChips && followUpChips.length) {
       const group = document.createElement('div');
       group.className = 'chip-group';
-      followUpChips.forEach(c => {
+      followUpChips.forEach(function (c) {
         const btn = document.createElement('button');
+        btn.type = 'button';
         btn.className = 'chip' + (c.orange ? ' orange' : '');
         btn.textContent = c.label;
-        btn.onclick = () => handleChip(c.value || c.label, c.intent);
+        btn.onclick = function (e) {
+          handleChip(c.value || c.label, c.intent, e.currentTarget);
+        };
         group.appendChild(btn);
       });
       col.appendChild(group);
@@ -537,9 +1021,7 @@
     row.className = 'msg-row assistant';
     row.id = 'typing-row';
 
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar assistant';
-    avatar.textContent = 'GA';
+    const avatar = assistantAvatarEl();
 
     const bubble = document.createElement('div');
     bubble.className = 'typing-bubble';
@@ -556,8 +1038,6 @@
     if (t) t.remove();
   }
 
-  // ── Conversation flow ───────────────────────────────────────────
-
   function startConversation() {
     addMessage('assistant',
       'Every gift starts with something that matters to you. What motivates you to give today?',
@@ -568,14 +1048,15 @@
     );
   }
 
-  function handleChip(value, intent) {
+  function handleChip(value, intent, chipEl) {
     if (intent === 'affinity' || intent === 'cause') {
+      disableChipGroup(chipEl);
       userIntent = intent;
       document.getElementById('input-area').classList.add('visible');
       addMessage('user', value);
       history.push({ role: 'user', content: value });
 
-      setTimeout(() => {
+      setTimeout(function () {
         if (intent === 'affinity') {
           addMessage('assistant', 'Which school(s), program(s), or team(s) were you part of?');
           history.push({ role: 'assistant', content: 'Which school(s), program(s), or team(s) were you part of?' });
@@ -585,11 +1066,10 @@
         }
       }, 400);
     } else {
+      disableChipGroup(chipEl);
       sendMessage(value);
     }
   }
-
-  // ── API call ────────────────────────────────────────────────────
 
   async function sendMessage(text) {
     const btn = document.getElementById('send-btn');
@@ -599,55 +1079,32 @@
     history.push({ role: 'user', content: text });
     showTyping();
 
-    const fundContext = funds.map(f =>
-      `Fund: ${f.fund_name}\nCategory: ${f.category}\nDescription: ${f.description}`
-    ).join('\n\n');
+    const fundContext = funds.map(function (f) {
+      return 'Fund: ' + f.fund_name + '\nCategory: ' + f.category + '\nDescription: ' + f.description;
+    }).join('\n\n');
 
     const intentNote = userIntent === 'affinity'
       ? 'This donor is giving based on personal affiliation with an SU school, program, or team. Prioritize funds in categories that match what they named.'
       : 'This donor is giving based on a cause or value they care about. Match across all categories based on mission alignment.';
 
-    const systemPrompt = `You are Giving Assistant, a warm and knowledgeable AI chatbot for Syracuse University donors. Your job is to listen carefully and recommend funds that genuinely match what the donor cares about.
-
-${intentNote}
-
-Here is the complete fund database:
-${fundContext}
-
-IMPORTANT: You must respond ONLY with a valid JSON object. No prose, no markdown, no explanation outside the JSON.
-
-Response format:
-{
-  "intro": "A warm 1-sentence intro acknowledging what the donor said",
-  "recommendations": [
-    {
-      "fund_name": "Exact fund name from the database",
-      "reason": "One warm sentence explaining why this fund matches what the donor said, personalized to their input"
-    }
-  ],
-  "show_more_chips": true
-}
-
-Rules:
-- Always return exactly 3 recommendations
-- fund_name must exactly match a name from the fund database
-- reason should be personalized to what the donor said, not a generic description
-- Set show_more_chips to true after the first set of results, false after a second set
-- Never recommend the same fund twice in a conversation
-- If the donor seems ready to give or says one feels right, set show_more_chips to false`;
+    const systemPrompt = 'You are Giving Assistant, a warm and knowledgeable AI chatbot for Syracuse University donors. Your job is to listen carefully and recommend funds that genuinely match what the donor cares about.\n\n' +
+      intentNote + '\n\nHere is the complete fund database:\n' + fundContext + '\n\n' +
+      'IMPORTANT: You must respond ONLY with a valid JSON object. No prose, no markdown, no explanation outside the JSON.\n\nResponse format:\n' +
+      '{\n  "intro": "A warm 1-sentence intro acknowledging what the donor said",\n  "recommendations": [\n    {\n      "fund_name": "Exact fund name from the database",\n      "reason": "One warm sentence explaining why this fund matches what the donor said, personalized to their input"\n    }\n  ],\n  "show_more_chips": true\n}\n\n' +
+      'Rules:\n- Always return exactly 3 recommendations\n- fund_name must exactly match a name from the fund database\n- reason should be personalized to what the donor said, not a generic description\n- Set show_more_chips to true after the first set of results, false after a second set\n- Never recommend the same fund twice in a conversation\n- If the donor seems ready to give or says one feels right, set show_more_chips to false';
 
     try {
       const res = await fetch(EDGE_FN_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON}`
+          'Authorization': 'Bearer ' + SUPABASE_ANON
         },
-        body: JSON.stringify({ messages: history, systemPrompt })
+        body: JSON.stringify({ messages: history, systemPrompt: systemPrompt })
       });
 
       const data = await res.json();
-      const rawReply = data.content.map(b => b.text || '').join('');
+      const rawReply = data.content.map(function (b) { return b.text || ''; }).join('');
       history.push({ role: 'assistant', content: rawReply });
       removeTyping();
 
@@ -680,8 +1137,6 @@ Rules:
     document.getElementById('user-input').focus();
   }
 
-  // ── Input handling ──────────────────────────────────────────────
-
   function handleSend() {
     const input = document.getElementById('user-input');
     const text = input.value.trim();
@@ -693,14 +1148,14 @@ Rules:
 
   document.getElementById('send-btn').addEventListener('click', handleSend);
 
-  document.getElementById('user-input').addEventListener('keydown', e => {
+  document.getElementById('user-input').addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
   });
 
-  document.getElementById('user-input').addEventListener('input', function() {
+  document.getElementById('user-input').addEventListener('input', function () {
     this.style.height = 'auto';
     this.style.height = Math.min(this.scrollHeight, 120) + 'px';
   });
