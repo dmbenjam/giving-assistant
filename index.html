@@ -26,8 +26,19 @@
       font-style: normal;
       font-display: swap;
     }
+    @font-face {
+      font-family: 'Sherman Serif';
+      src: url('fonts/ShermanSerif-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    h1, h2 {
+      font-weight: 700;
+    }
 
     html { scroll-behavior: smooth; }
 
@@ -73,7 +84,7 @@
 
     .site-nav .brand-logo {
       display: block;
-      height: 36px;
+      height: 28px;
       width: auto;
     }
 
@@ -119,7 +130,7 @@
     .hero-title {
       font-family: 'Sherman Serif', 'Georgia', serif;
       font-size: clamp(1.85rem, 4.5vw, 2.75rem);
-      font-weight: 400;
+      font-weight: 700;
       line-height: 1.15;
       letter-spacing: -0.02em;
       margin-bottom: 0.75rem;
@@ -183,6 +194,7 @@
       height: auto;
       max-height: min(52vh, 420px);
       object-fit: contain;
+      mix-blend-mode: screen;
       filter: drop-shadow(0 0 28px rgba(255, 230, 180, 0.35));
     }
 
@@ -199,7 +211,7 @@
     .section-heading {
       font-family: 'Sherman Serif', 'Georgia', serif;
       font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 400;
+      font-weight: 700;
       color: var(--su-navy);
       margin-bottom: 1.5rem;
       line-height: 1.25;
@@ -215,20 +227,45 @@
     .bg-gray { background: var(--section-gray); }
     .bg-white { background: var(--white); }
 
-    /* Problem stats */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
+    /* Meeting the Moment — stats */
+    .moment-body {
+      font-size: 1rem;
+      color: var(--text-primary);
+      line-height: 1.7;
+      max-width: 75ch;
       margin-bottom: 2rem;
     }
 
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
     @media (min-width: 700px) {
-      .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    }
+
+    .stat-card-gradient {
+      border-radius: 26px;
+      padding: 2px;
+      background: linear-gradient(145deg, var(--su-orange) 0%, var(--su-navy) 100%);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+      box-shadow: 0 4px 18px rgba(13, 27, 64, 0.08);
+    }
+
+    .stat-card-gradient:hover {
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 18px 44px rgba(13, 27, 64, 0.16);
     }
 
     .stat-card {
       text-align: left;
+      background: var(--white);
+      border-radius: 24px;
+      padding: 1.4rem 1.35rem;
+      height: 100%;
     }
 
     .stat-num {
@@ -249,64 +286,87 @@
       max-width: 28ch;
     }
 
-    .problem-body {
-      font-size: 1rem;
-      color: var(--text-primary);
-      line-height: 1.7;
-      max-width: 75ch;
-      margin-bottom: 1rem;
-    }
-
     .source-line {
       font-size: 0.8rem;
       color: var(--text-muted);
       font-style: italic;
     }
 
-    /* Feature cards */
-    .feature-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-    }
-
-    @media (min-width: 768px) {
-      .feature-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-
-    .feature-card {
-      background: var(--white);
-      border: 1px solid var(--border);
+    /* Features accordion */
+    .accordion {
       border-radius: var(--radius);
-      padding: 1.5rem 1.35rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
       box-shadow: 0 2px 12px rgba(13, 27, 64, 0.06);
-      transition: box-shadow 0.2s ease;
     }
 
-    .feature-card:hover {
-      box-shadow: 0 6px 24px rgba(13, 27, 64, 0.1);
+    .accordion-item + .accordion-item {
+      border-top: 1px solid var(--border);
     }
 
-    .feature-icon {
-      width: 44px;
-      height: 44px;
-      margin-bottom: 1rem;
+    .accordion-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.15rem;
+      background: var(--white);
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Sherman Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--su-navy);
+      transition: background 0.2s ease;
+    }
+
+    .accordion-trigger:hover {
+      background: var(--chat-bg);
+    }
+
+    .accordion-item.is-open .accordion-trigger {
+      background: var(--section-gray);
+    }
+
+    .accordion-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .feature-icon-sm {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
       color: var(--su-orange);
     }
 
-    .feature-card h3 {
-      font-family: 'Sherman Sans', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 700;
+    .accordion-chevron {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
       color: var(--su-navy);
-      margin-bottom: 0.5rem;
-      line-height: 1.35;
+      opacity: 0.65;
+      transition: transform 0.3s ease;
     }
 
-    .feature-card p {
-      font-size: 0.92rem;
+    .accordion-item.is-open .accordion-chevron {
+      transform: rotate(180deg);
+    }
+
+    .accordion-panel {
+      margin: 0;
+      padding: 0 1.15rem 1.15rem 3.75rem;
+      font-size: 0.94rem;
       color: var(--text-secondary);
       line-height: 1.65;
+    }
+
+    .accordion-panel[hidden] {
+      display: none !important;
     }
 
     /* —— Chat section —— */
@@ -344,6 +404,7 @@
       object-fit: contain;
       border-radius: 50%;
       flex-shrink: 0;
+      mix-blend-mode: screen;
     }
 
     .chat-panel-header span {
@@ -682,7 +743,7 @@
 
   <nav class="site-nav" aria-label="Primary">
     <a href="#" aria-label="Syracuse University home">
-      <img class="brand-logo" src="assets/block-s-white.svg" width="36" height="50" alt="Syracuse University" />
+      <img class="brand-logo" src="assets/syracuse-wordmark-horizontal-orange.svg" width="200" height="38" alt="Syracuse University" />
     </a>
   </nav>
 
@@ -710,27 +771,33 @@
     </div>
   </section>
 
-  <section class="section bg-gray" aria-labelledby="problem-heading">
+  <section class="section bg-gray" aria-labelledby="moment-heading">
     <div class="section-inner">
-      <h2 id="problem-heading" class="section-heading">Why Giving Assistant? Why Now?</h2>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-num"><span>42%</span></div>
-          <p class="stat-label">of alumni don't see their institution as a philanthropic priority</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num"><span>68%</span></div>
-          <p class="stat-label">of alumni don't feel their philanthropic priorities are known by their alma mater</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num"><span>13%</span></div>
-          <p class="stat-label">of Millennial and Gen Z alumni gave to higher education last year</p>
-        </div>
-      </div>
-      <p class="problem-body">
-        Alumni are generous — they're just giving elsewhere. The 2026 National Alumni Survey found that alumni increasingly give based on values and personal
+      <h2 id="moment-heading" class="section-heading">Meeting the Moment</h2>
+      <p class="moment-body">
+        Alumni are generous — they're just giving elsewhere. Alumni increasingly give based on values and personal
         connection, not loyalty or obligation. Giving Assistant is built for this moment.
       </p>
+      <div class="stats-grid">
+        <div class="stat-card-gradient">
+          <div class="stat-card">
+            <div class="stat-num"><span>42%</span></div>
+            <p class="stat-label">of alumni don't see their institution as a philanthropic priority</p>
+          </div>
+        </div>
+        <div class="stat-card-gradient">
+          <div class="stat-card">
+            <div class="stat-num"><span>68%</span></div>
+            <p class="stat-label">of alumni don't feel their philanthropic priorities are known by their alma mater</p>
+          </div>
+        </div>
+        <div class="stat-card-gradient">
+          <div class="stat-card">
+            <div class="stat-num"><span>13%</span></div>
+            <p class="stat-label">of Millennial and Gen Z alumni gave to higher education last year</p>
+          </div>
+        </div>
+      </div>
       <p class="source-line">Source: 2026 National Alumni Survey</p>
     </div>
   </section>
@@ -738,33 +805,83 @@
   <section class="section bg-white" aria-labelledby="features-heading">
     <div class="section-inner">
       <h2 id="features-heading" class="section-heading">What Giving Assistant Does</h2>
-      <div class="feature-grid">
-        <article class="feature-card">
-          <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="8" y="10" width="32" height="24" rx="4" stroke="currentColor" stroke-width="2"/>
-            <path d="M16 22h16M16 28h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="34" cy="34" r="6" fill="currentColor" opacity="0.25"/>
-          </svg>
-          <h3>Listens Before It Asks</h3>
-          <p>Instead of presenting a generic fund list, Giving Assistant starts with a conversation, understanding what the donor cares about before making any recommendation.</p>
-        </article>
-        <article class="feature-card">
-          <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="22" cy="22" r="12" stroke="currentColor" stroke-width="2"/>
-            <path d="M32 32l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="22" cy="22" r="4" fill="currentColor" opacity="0.35"/>
-          </svg>
-          <h3>Values-Matched Fund Discovery</h3>
-          <p>Using natural language AI, Giving Assistant reasons across 100+ Syracuse University funds to surface the ones that genuinely align with each donor's interests and affiliations.</p>
-        </article>
-        <article class="feature-card">
-          <svg class="feature-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M10 36V12l14-6 14 6v24" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            <path d="M24 18v18M18 30h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <h3>Two Paths to Giving</h3>
-          <p>Donors can explore funds through personal affiliation (school, program, or team) or cause-based giving — meeting them where they are.</p>
-        </article>
+      <div class="accordion" id="features-accordion">
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger" id="acc-btn-1" aria-expanded="false" aria-controls="acc-panel-1">
+            <span class="accordion-title-row">
+              <svg class="feature-icon-sm" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="8" y="10" width="32" height="24" rx="4" stroke="currentColor" stroke-width="2"/>
+                <path d="M16 22h16M16 28h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="34" cy="34" r="6" fill="currentColor" opacity="0.25"/>
+              </svg>
+              <span>Listens Before It Asks</span>
+            </span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="acc-panel-1" class="accordion-panel" role="region" aria-labelledby="acc-btn-1" hidden>
+            <p>Instead of presenting a generic fund list, Giving Assistant starts with a conversation, understanding what the donor cares about before making any recommendation.</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger" id="acc-btn-2" aria-expanded="false" aria-controls="acc-panel-2">
+            <span class="accordion-title-row">
+              <svg class="feature-icon-sm" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="22" cy="22" r="12" stroke="currentColor" stroke-width="2"/>
+                <path d="M32 32l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="22" cy="22" r="4" fill="currentColor" opacity="0.35"/>
+              </svg>
+              <span>Values-Matched Fund Discovery</span>
+            </span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="acc-panel-2" class="accordion-panel" role="region" aria-labelledby="acc-btn-2" hidden>
+            <p>Using natural language AI, Giving Assistant reasons across 100+ Syracuse University funds to surface the ones that genuinely align with each donor's interests and affiliations.</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger" id="acc-btn-3" aria-expanded="false" aria-controls="acc-panel-3">
+            <span class="accordion-title-row">
+              <svg class="feature-icon-sm" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M10 36V12l14-6 14 6v24" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M24 18v18M18 30h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Two Paths to Giving</span>
+            </span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="acc-panel-3" class="accordion-panel" role="region" aria-labelledby="acc-btn-3" hidden>
+            <p>Donors can explore funds through personal affiliation (school, program, or team) or cause-based giving — meeting them where they are.</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger" id="acc-btn-4" aria-expanded="false" aria-controls="acc-panel-4">
+            <span class="accordion-title-row">
+              <svg class="feature-icon-sm" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M24 8l3 8h8l-6 5 2 8-7-5-7 5 2-8-6-5h8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+              <span>Designed for the Next Generation of Donors</span>
+            </span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="acc-panel-4" class="accordion-panel" role="region" aria-labelledby="acc-btn-4" hidden>
+            <p>Younger alumni respond to specificity, agency, and relevance. Giving Assistant replaces broad annual fund appeals with personalized, values-driven discovery.</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger" id="acc-btn-5" aria-expanded="false" aria-controls="acc-panel-5">
+            <span class="accordion-title-row">
+              <svg class="feature-icon-sm" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M18 12h20v24H18z" stroke="currentColor" stroke-width="2"/>
+                <path d="M14 16H10v20h4M30 24l-4-4v8l4-4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>A Gateway to Clementine Integration</span>
+            </span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="acc-panel-5" class="accordion-panel" role="region" aria-labelledby="acc-btn-5" hidden>
+            <p>Built as a prototype for native Clementine integration, Giving Assistant is designed to eventually live inside the platform alumni already use to navigate Syracuse University.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -861,6 +978,32 @@
     window.addEventListener('resize', resize);
     resize();
     requestAnimationFrame(tick);
+  })();
+
+  (function initFeaturesAccordion() {
+    var root = document.getElementById('features-accordion');
+    if (!root) return;
+    root.querySelectorAll('.accordion-trigger').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var wasOpen = btn.getAttribute('aria-expanded') === 'true';
+        root.querySelectorAll('.accordion-item').forEach(function (item) {
+          var b = item.querySelector('.accordion-trigger');
+          var pid = b.getAttribute('aria-controls');
+          var p = pid ? document.getElementById(pid) : null;
+          b.setAttribute('aria-expanded', 'false');
+          item.classList.remove('is-open');
+          if (p) p.hidden = true;
+        });
+        if (!wasOpen) {
+          btn.setAttribute('aria-expanded', 'true');
+          var panelId = btn.getAttribute('aria-controls');
+          var panel = panelId ? document.getElementById(panelId) : null;
+          if (panel) panel.hidden = false;
+          var item = btn.closest('.accordion-item');
+          if (item) item.classList.add('is-open');
+        }
+      });
+    });
   })();
 
   const MASCOT_SRC_PNG = 'assets/clementine-mascot.png';
