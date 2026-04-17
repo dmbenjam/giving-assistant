@@ -761,11 +761,10 @@
       </div>
       <div class="hero-mascot">
         <img
-          src="assets/clementine-mascot.png"
+          src="assets/ClementineShadow.png"
           alt="Clementine mascot"
           width="340"
           height="374"
-          onerror="this.onerror=null;this.src='assets/clementine-mascot.svg';"
         />
       </div>
     </div>
@@ -896,11 +895,10 @@
       <div class="chat-panel">
         <div class="chat-panel-header">
           <img
-            src="assets/clementine-mascot.png"
+            src="assets/ClementineShadow.png"
             alt=""
             width="32"
             height="32"
-            onerror="this.onerror=null;this.src='assets/clementine-mascot.svg';"
           />
           <span>Giving Assistant</span>
         </div>
@@ -1006,8 +1004,7 @@
     });
   })();
 
-  const MASCOT_SRC_PNG = 'assets/clementine-mascot.png';
-  const MASCOT_SRC_SVG = 'assets/clementine-mascot.svg';
+  const MASCOT_SRC = 'assets/ClementineShadow.png';
 
   function assistantAvatarEl() {
     const img = document.createElement('img');
@@ -1015,11 +1012,7 @@
     img.alt = '';
     img.width = 30;
     img.height = 30;
-    img.src = MASCOT_SRC_PNG;
-    img.onerror = function () {
-      this.onerror = null;
-      this.src = MASCOT_SRC_SVG;
-    };
+    img.src = MASCOT_SRC;
     return img;
   }
 
