@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Giving Assistant — Syracuse University</title>
+  <link rel="icon" type="image/png" href="assets/ClementineShadow.png" />
   <style>
     @font-face {
       font-family: 'Sherman Sans';
@@ -61,6 +62,7 @@
 
     body {
       font-family: 'Sherman Sans', system-ui, sans-serif;
+      font-size: 17px;
       background: var(--white);
       color: var(--text-primary);
       min-height: 100vh;
@@ -93,9 +95,26 @@
       position: relative;
       margin-top: var(--nav-h);
       min-height: min(88vh, 720px);
-      background: var(--su-navy);
+      display: grid;
+      align-items: center;
+      background-color: #02081a;
+      background-image: url('assets/space.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       color: var(--white);
       overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(120% 85% at 65% 25%, rgba(30, 52, 120, 0.08) 0%, rgba(2, 8, 26, 0.5) 60%, rgba(2, 8, 26, 0.78) 100%),
+        linear-gradient(180deg, rgba(2, 8, 26, 0.42) 0%, rgba(2, 8, 26, 0.72) 100%);
+      z-index: 0;
+      pointer-events: none;
     }
 
     .hero-starfield {
@@ -104,28 +123,37 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
+      z-index: 1;
+      mix-blend-mode: screen;
+      opacity: 1;
     }
 
     .hero-inner {
       position: relative;
-      z-index: 1;
+      z-index: 2;
+      width: min(100%, 1200px);
       max-width: 1200px;
       margin: 0 auto;
-      padding: clamp(2.5rem, 6vw, 4.5rem) 1.5rem clamp(3rem, 8vw, 5rem);
+      padding: clamp(2.5rem, 6vw, 4rem) 1.5rem;
       display: grid;
       grid-template-columns: 1fr;
       gap: 2rem;
       align-items: center;
+      justify-content: center;
     }
 
     @media (min-width: 900px) {
       .hero-inner {
-        grid-template-columns: 1fr minmax(260px, 38%);
+        grid-template-columns: minmax(0, 640px) minmax(260px, 340px);
         gap: 3rem;
       }
     }
 
-    .hero-copy { max-width: 640px; }
+    .hero-copy {
+      max-width: 640px;
+      width: 100%;
+      justify-self: end;
+    }
 
     .hero-title {
       font-family: 'Sherman Serif', 'Georgia', serif;
@@ -183,6 +211,7 @@
       justify-content: center;
       align-items: center;
       position: relative;
+      justify-self: start;
     }
 
     @media (min-width: 900px) {
@@ -215,6 +244,11 @@
       color: var(--su-navy);
       margin-bottom: 1.5rem;
       line-height: 1.25;
+      text-align: left;
+    }
+
+    .section-heading.centered {
+      text-align: left;
     }
 
     .section-sub {
@@ -222,6 +256,7 @@
       color: var(--text-secondary);
       margin-top: -0.75rem;
       margin-bottom: 1.5rem;
+      text-align: left;
     }
 
     .bg-gray { background: var(--section-gray); }
@@ -233,6 +268,14 @@
       color: var(--text-primary);
       line-height: 1.7;
       max-width: 75ch;
+      margin-bottom: 2rem;
+    }
+
+    .moment-sub {
+      text-align: left;
+      max-width: 75ch;
+      margin-left: 0;
+      margin-right: 0;
       margin-bottom: 2rem;
     }
 
@@ -294,10 +337,18 @@
 
     /* Features accordion */
     .accordion {
+      max-width: 720px;
+      margin: 0 auto;
       border-radius: var(--radius);
       overflow: hidden;
       border: 1px solid var(--border);
       box-shadow: 0 2px 12px rgba(13, 27, 64, 0.06);
+    }
+
+    #features-heading {
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .accordion-item + .accordion-item {
@@ -359,7 +410,7 @@
 
     .accordion-panel {
       margin: 0;
-      padding: 0 1.15rem 1.15rem 3.75rem;
+      padding: 1.15rem 1.15rem 1.15rem 3.75rem;
       font-size: 0.94rem;
       color: var(--text-secondary);
       line-height: 1.65;
@@ -369,14 +420,27 @@
       display: none !important;
     }
 
+    .accordion-panel .feature-link {
+      font-weight: 700;
+      text-decoration: underline;
+      color: #000E54;
+    }
+
+    .accordion-panel .feature-link:hover {
+      color: var(--su-orange);
+    }
+
     /* —— Chat section —— */
     .chat-section-intro {
-      text-align: center;
+      text-align: left;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
       margin-bottom: 1.75rem;
     }
 
-    .chat-section-intro .section-heading { margin-bottom: 0.35rem; }
-    .chat-section-intro .section-sub { margin-bottom: 0; }
+    .chat-section-intro .section-heading { margin-bottom: 1.5rem; }
+    .chat-section-intro .section-sub { margin-bottom: 2rem; }
 
     .chat-panel {
       max-width: 720px;
@@ -396,21 +460,30 @@
       gap: 10px;
       padding: 0 1rem;
       min-height: 52px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .chat-panel-header img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-      border-radius: 50%;
-      flex-shrink: 0;
-      mix-blend-mode: screen;
+    .chat-panel-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #FF431B 0%, #F76900 100%);
+      opacity: 0;
+      transition: opacity 700ms ease;
+      z-index: 0;
+    }
+
+    .chat-panel-header.in-view::before {
+      opacity: 1;
     }
 
     .chat-panel-header span {
       font-size: 1rem;
       font-weight: 700;
       letter-spacing: 0.02em;
+      position: relative;
+      z-index: 1;
     }
 
     .chat-panel-body {
@@ -695,6 +768,8 @@
     #send-btn:active { transform: scale(0.96); }
     #send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
     #send-btn svg { width: 16px; height: 16px; }
+    #send-btn.generating { background: var(--su-navy); }
+    #send-btn.generating:hover { background: var(--su-navy); }
 
     .chat-disclaimer {
       padding: 0.65rem 1rem 0.85rem;
@@ -772,11 +847,11 @@
 
   <section class="section bg-gray" aria-labelledby="moment-heading">
     <div class="section-inner">
-      <h2 id="moment-heading" class="section-heading">Meeting the Moment</h2>
-      <p class="moment-body">
+      <h2 id="moment-heading" class="section-heading centered">Meeting the Moment</h2>
+      <h3 class="section-sub moment-sub">
         Alumni are generous — they're just giving elsewhere. Alumni increasingly give based on values and personal
-        connection, not loyalty or obligation. Giving Assistant is built for this moment.
-      </p>
+        connection, not loyalty or obligation.
+      </h3>
       <div class="stats-grid">
         <div class="stat-card-gradient">
           <div class="stat-card">
@@ -792,8 +867,8 @@
         </div>
         <div class="stat-card-gradient">
           <div class="stat-card">
-            <div class="stat-num"><span>13%</span></div>
-            <p class="stat-label">of Millennial and Gen Z alumni gave to higher education last year</p>
+            <div class="stat-num"><span>67%</span></div>
+            <p class="stat-label">of alumni who don't donate to their alma mater support other causes</p>
           </div>
         </div>
       </div>
@@ -803,82 +878,66 @@
 
   <section class="section bg-white" aria-labelledby="features-heading">
     <div class="section-inner">
-      <h2 id="features-heading" class="section-heading">What Giving Assistant Does</h2>
+      <h2 id="features-heading" class="section-heading centered">What Giving Assistant Does</h2>
       <div class="accordion" id="features-accordion">
         <div class="accordion-item">
           <button type="button" class="accordion-trigger" id="acc-btn-1" aria-expanded="false" aria-controls="acc-panel-1">
             <span class="accordion-title-row">
-              <svg class="feature-icon-sm" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect x="8" y="10" width="32" height="24" rx="4" stroke="currentColor" stroke-width="2"/>
-                <path d="M16 22h16M16 28h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="34" cy="34" r="6" fill="currentColor" opacity="0.25"/>
-              </svg>
-              <span>Listens Before It Asks</span>
+              <img class="feature-icon-sm" src="assets/icon-microscope.svg" alt="" aria-hidden="true" />
+              <span>Advanced Fund Discovery</span>
             </span>
             <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div id="acc-panel-1" class="accordion-panel" role="region" aria-labelledby="acc-btn-1" hidden>
-            <p>Instead of presenting a generic fund list, Giving Assistant starts with a conversation, understanding what the donor cares about before making any recommendation.</p>
+            <p>Rather than a filter or keyword search, Giving Assistant uses natural language to reason across 100+ Syracuse University funds and surface the ones that genuinely align with each donor's interests and affiliations.</p>
           </div>
         </div>
         <div class="accordion-item">
           <button type="button" class="accordion-trigger" id="acc-btn-2" aria-expanded="false" aria-controls="acc-panel-2">
             <span class="accordion-title-row">
-              <svg class="feature-icon-sm" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <circle cx="22" cy="22" r="12" stroke="currentColor" stroke-width="2"/>
-                <path d="M32 32l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="22" cy="22" r="4" fill="currentColor" opacity="0.35"/>
-              </svg>
-              <span>Values-Matched Fund Discovery</span>
+              <img class="feature-icon-sm" src="assets/icon-crossroads.svg" alt="" aria-hidden="true" />
+              <span>Two Paths to Giving</span>
             </span>
             <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div id="acc-panel-2" class="accordion-panel" role="region" aria-labelledby="acc-btn-2" hidden>
-            <p>Using natural language AI, Giving Assistant reasons across 100+ Syracuse University funds to surface the ones that genuinely align with each donor's interests and affiliations.</p>
+            <p>Donors can explore funds through personal affiliation or a cause that is important to them.</p>
           </div>
         </div>
         <div class="accordion-item">
           <button type="button" class="accordion-trigger" id="acc-btn-3" aria-expanded="false" aria-controls="acc-panel-3">
             <span class="accordion-title-row">
-              <svg class="feature-icon-sm" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M10 36V12l14-6 14 6v24" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                <path d="M24 18v18M18 30h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              <span>Two Paths to Giving</span>
+              <img class="feature-icon-sm" src="assets/icon-group.svg" alt="" aria-hidden="true" />
+              <span>Designed for Growing Audiences</span>
             </span>
             <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div id="acc-panel-3" class="accordion-panel" role="region" aria-labelledby="acc-btn-3" hidden>
-            <p>Donors can explore funds through personal affiliation (school, program, or team) or cause-based giving — meeting them where they are.</p>
+            <p>Younger generations, alumni of color, and women tend to be especially driven by passion for and connection to a specific cause, as opposed to loyalty and duty to their alma mater. Giving Assistant replaces broad annual fund appeals with personalized, values-driven discovery.</p>
           </div>
         </div>
         <div class="accordion-item">
           <button type="button" class="accordion-trigger" id="acc-btn-4" aria-expanded="false" aria-controls="acc-panel-4">
             <span class="accordion-title-row">
-              <svg class="feature-icon-sm" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M24 8l3 8h8l-6 5 2 8-7-5-7 5 2-8-6-5h8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-              </svg>
-              <span>Designed for the Next Generation of Donors</span>
+              <img class="feature-icon-sm" src="assets/icon-cloud.svg" alt="" aria-hidden="true" />
+              <span>Clementine Integration</span>
             </span>
             <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div id="acc-panel-4" class="accordion-panel" role="region" aria-labelledby="acc-btn-4" hidden>
-            <p>Younger alumni respond to specificity, agency, and relevance. Giving Assistant replaces broad annual fund appeals with personalized, values-driven discovery.</p>
+            <p>Built as a prototype for <a class="feature-link" href="https://clementine.syr.edu" target="_blank" rel="noopener noreferrer">Clementine</a> integration, Giving Assistant is designed to live inside a platform that is already slated for growth.</p>
           </div>
         </div>
         <div class="accordion-item">
           <button type="button" class="accordion-trigger" id="acc-btn-5" aria-expanded="false" aria-controls="acc-panel-5">
             <span class="accordion-title-row">
-              <svg class="feature-icon-sm" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M18 12h20v24H18z" stroke="currentColor" stroke-width="2"/>
-                <path d="M14 16H10v20h4M30 24l-4-4v8l4-4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <span>A Gateway to Clementine Integration</span>
+              <img class="feature-icon-sm" src="assets/icon-gift.svg" alt="" aria-hidden="true" />
+              <span>Giving Form Handoff</span>
             </span>
             <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div id="acc-panel-5" class="accordion-panel" role="region" aria-labelledby="acc-btn-5" hidden>
-            <p>Built as a prototype for native Clementine integration, Giving Assistant is designed to eventually live inside the platform alumni already use to navigate Syracuse University.</p>
+            <p>When donors select "Make a Gift," they're taken to a giving form prefilled with their selected fund, creating a seamless experience. For prototype purposes, this currently links to a blank form.</p>
           </div>
         </div>
       </div>
@@ -889,17 +948,11 @@
     <div class="section-inner">
       <div class="chat-section-intro">
         <h2 id="chat-heading" class="section-heading">Try It Yourself</h2>
-        <p class="section-sub">Ask Giving Assistant to help you find your fund.</p>
+        <h3 class="section-sub moment-sub">Start your conversation with Giving Assistant.</h3>
       </div>
 
       <div class="chat-panel">
         <div class="chat-panel-header">
-          <img
-            src="assets/ClementineShadow.png"
-            alt=""
-            width="32"
-            height="32"
-          />
           <span>Giving Assistant</span>
         </div>
         <div class="chat-panel-body">
@@ -907,7 +960,7 @@
             <div id="messages"></div>
             <div id="input-area">
               <textarea id="user-input" rows="1" placeholder="Type a message..."></textarea>
-              <button type="button" id="send-btn" aria-label="Send">
+              <button type="button" id="send-btn" aria-label="Send" disabled>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="22" y1="2" x2="11" y2="13"></line>
                   <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -938,6 +991,7 @@
     const ctx = canvas.getContext('2d');
     let stars = [];
     let w = 0, h = 0;
+    let pointer = { x: 0, y: 0, active: false };
 
     function resize() {
       const parent = canvas.parentElement;
@@ -945,34 +999,81 @@
       const rect = parent.getBoundingClientRect();
       w = canvas.width = Math.floor(rect.width);
       h = canvas.height = Math.floor(rect.height);
-      const count = Math.min(120, Math.floor((w * h) / 9000));
+      const count = Math.min(170, Math.floor((w * h) / 6800));
       stars = Array.from({ length: count }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        r: Math.random() * 1.1 + 0.25,
+        r: Math.random() * 1.35 + 0.22,
         tw: Math.random() * Math.PI * 2,
-        vx: (Math.random() - 0.5) * 0.12,
-        vy: (Math.random() - 0.5) * 0.12
+        twSpeed: 0.01 + Math.random() * 0.03,
+        pulse: 0.22 + Math.random() * 0.34,
+        glow: Math.random() < 0.18 ? 1 : 0,
+        focus: 0,
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 0.5) * 0.2
       }));
+    }
+
+    function updatePointerFromEvent(evt) {
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+      pointer.x = ((evt.clientX - rect.left) / rect.width) * w;
+      pointer.y = ((evt.clientY - rect.top) / rect.height) * h;
+      pointer.active = true;
+    }
+
+    function clearPointer() {
+      pointer.active = false;
     }
 
     function tick(t) {
       ctx.clearRect(0, 0, w, h);
       stars.forEach(s => {
-        s.tw += 0.018;
+        s.tw += s.twSpeed;
         s.x += s.vx;
         s.y += s.vy;
         if (s.x < 0) s.x += w; else if (s.x > w) s.x -= w;
         if (s.y < 0) s.y += h; else if (s.y > h) s.y -= h;
-        const a = 0.25 + Math.sin(s.tw) * 0.35;
+
+        // Rare, subtle sparkles keep the field feeling alive.
+        if (Math.random() < 0.0009) {
+          s.glow = 1.8;
+        }
+        s.glow *= 0.965;
+
+        // Cursor-follow parallax: make nearby stars noticeably react to the pointer.
+        let px = s.x;
+        let py = s.y;
+        if (pointer.active) {
+          const dx = pointer.x - s.x;
+          const dy = pointer.y - s.y;
+          const dist = Math.hypot(dx, dy);
+          const influenceRadius = Math.max(220, Math.min(460, Math.min(w, h) * 0.55));
+          const influence = Math.max(0, 1 - dist / influenceRadius);
+          const eased = influence * influence * (1.35 - influence * 0.35);
+          s.focus += (eased - s.focus) * 0.2;
+          const shift = 42 * s.focus;
+          px += dx * (shift / Math.max(dist, 1)) * 0.32;
+          py += dy * (shift / Math.max(dist, 1)) * 0.32;
+        } else {
+          s.focus *= 0.9;
+        }
+
+        const alphaBase = 0.3 + Math.sin(s.tw) * s.pulse;
+        const a = Math.max(0.12, Math.min(1, alphaBase + s.glow * 0.2 + s.focus * 0.95));
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.arc(px, py, s.r + s.focus * 1.05, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(255,255,255,' + a.toFixed(3) + ')';
         ctx.fill();
       });
       requestAnimationFrame(tick);
     }
 
+    canvas.addEventListener('mousemove', updatePointerFromEvent);
+    canvas.addEventListener('mouseenter', updatePointerFromEvent);
+    canvas.addEventListener('mouseleave', clearPointer);
+    window.addEventListener('pointermove', updatePointerFromEvent, { passive: true });
+    window.addEventListener('pointerleave', clearPointer);
     window.addEventListener('resize', resize);
     resize();
     requestAnimationFrame(tick);
@@ -1004,6 +1105,97 @@
     });
   })();
 
+  (function initMomentCounters() {
+    var section = document.querySelector('[aria-labelledby="moment-heading"]');
+    if (!section) return;
+
+    var counters = [];
+    section.querySelectorAll('.stat-num span').forEach(function (span) {
+      var text = (span.textContent || '').trim();
+      var match = text.match(/^(\d+)(.*)$/);
+      if (!match) return;
+      var target = parseInt(match[1], 10);
+      var suffix = match[2] || '';
+      counters.push({ el: span, target: target, suffix: suffix });
+      span.textContent = '0' + suffix;
+    });
+
+    if (!counters.length) return;
+
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function animateCounter(counter, delayMs) {
+      var startTs = null;
+      var duration = 1200;
+
+      function frame(ts) {
+        if (startTs === null) startTs = ts + delayMs;
+        var elapsed = ts - startTs;
+        if (elapsed < 0) {
+          requestAnimationFrame(frame);
+          return;
+        }
+        var progress = Math.min(elapsed / duration, 1);
+        var value = Math.round(counter.target * easeOutCubic(progress));
+        counter.el.textContent = String(value) + counter.suffix;
+        if (progress < 1) requestAnimationFrame(frame);
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    var hasAnimated = false;
+    function startCounters() {
+      if (hasAnimated) return;
+      hasAnimated = true;
+      counters.forEach(function (counter, idx) {
+        animateCounter(counter, idx * 120);
+      });
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      startCounters();
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        startCounters();
+        observer.disconnect();
+      });
+    }, { threshold: 0.35 });
+
+    observer.observe(section);
+  })();
+
+  (function initChatHeaderInViewGradient() {
+    var header = document.querySelector('.chat-panel-header');
+    if (!header) return;
+    var activationDelayMs = 1000;
+
+    function activateGradient() {
+      header.classList.add('in-view');
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      activateGradient();
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        window.setTimeout(activateGradient, activationDelayMs);
+        observer.disconnect();
+      });
+    }, { threshold: 0.45 });
+
+    observer.observe(header);
+  })();
+
   const MASCOT_SRC = 'assets/ClementineShadow.png';
 
   function assistantAvatarEl() {
@@ -1020,10 +1212,14 @@
   const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlycmFleXRlY3Fuamp0bmh3emtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMDE3NTQsImV4cCI6MjA5MTY3Nzc1NH0.bqL1Z-7wPTLlmBfmS_fKmqUPdVIUGs8OZnGUha2IKK0';
   const EDGE_FN_URL = 'https://yrraeytecqnjjtnhwzkb.supabase.co/functions/v1/chat';
   const HANDOFF_URL = 'https://secure.syr.edu/s/1632/17/form/form.aspx?sid=1632&gid=2&pgid=436&cid=1161';
+  const SEND_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
+  const STOP_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><rect x="9" y="9" width="6" height="6" fill="currentColor" stroke="none"></rect></svg>';
 
   let funds = [];
   let history = [];
   let userIntent = null;
+  let isGenerating = false;
+  let activeRequestController = null;
 
   async function loadFunds() {
     const res = await fetch(SUPABASE_URL + '/rest/v1/funds?select=fund_name,category,description', {
@@ -1114,15 +1310,7 @@
       giftBtn.rel = 'noopener noreferrer';
       giftBtn.textContent = 'Make a Gift';
 
-      const learnBtn = document.createElement('a');
-      learnBtn.className = 'fund-card-btn secondary';
-      learnBtn.href = 'https://www.syracuse.edu';
-      learnBtn.target = '_blank';
-      learnBtn.rel = 'noopener noreferrer';
-      learnBtn.textContent = 'Learn More';
-
       actions.appendChild(giftBtn);
-      actions.appendChild(learnBtn);
       card.appendChild(name);
       card.appendChild(desc);
       card.appendChild(actions);
@@ -1174,6 +1362,25 @@
     if (t) t.remove();
   }
 
+  function setSendButtonState(generating) {
+    const btn = document.getElementById('send-btn');
+    isGenerating = generating;
+    btn.classList.toggle('generating', generating);
+    btn.setAttribute('aria-label', generating ? 'Stop generating' : 'Send');
+    btn.innerHTML = generating ? STOP_ICON : SEND_ICON;
+    updateSendButtonDisabled();
+  }
+
+  function updateSendButtonDisabled() {
+    const btn = document.getElementById('send-btn');
+    if (isGenerating) {
+      btn.disabled = false;
+      return;
+    }
+    const hasText = document.getElementById('user-input').value.trim().length > 0;
+    btn.disabled = !hasText;
+  }
+
   function startConversation() {
     addMessage('assistant',
       'Every gift starts with something that matters to you. What motivates you to give today?',
@@ -1208,12 +1415,13 @@
   }
 
   async function sendMessage(text) {
-    const btn = document.getElementById('send-btn');
-    btn.disabled = true;
+    if (isGenerating) return;
 
     addMessage('user', text);
     history.push({ role: 'user', content: text });
     showTyping();
+    setSendButtonState(true);
+    activeRequestController = new AbortController();
 
     const fundContext = funds.map(function (f) {
       return 'Fund: ' + f.fund_name + '\nCategory: ' + f.category + '\nDescription: ' + f.description;
@@ -1236,7 +1444,8 @@
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + SUPABASE_ANON
         },
-        body: JSON.stringify({ messages: history, systemPrompt: systemPrompt })
+        body: JSON.stringify({ messages: history, systemPrompt: systemPrompt }),
+        signal: activeRequestController.signal
       });
 
       const data = await res.json();
@@ -1250,7 +1459,6 @@
         parsed = JSON.parse(clean);
       } catch (e) {
         addMessage('assistant', rawReply.replace(/\n/g, '<br>'));
-        btn.disabled = false;
         return;
       }
 
@@ -1266,14 +1474,23 @@
 
     } catch (e) {
       removeTyping();
-      addMessage('assistant', 'Something went wrong — please try again in a moment.');
+      if (e.name !== 'AbortError') {
+        addMessage('assistant', 'Something went wrong — please try again in a moment.');
+      }
+    } finally {
+      activeRequestController = null;
+      setSendButtonState(false);
+      document.getElementById('user-input').focus();
     }
-
-    btn.disabled = false;
-    document.getElementById('user-input').focus();
   }
 
   function handleSend() {
+    if (isGenerating && activeRequestController) {
+      activeRequestController.abort();
+      removeTyping();
+      return;
+    }
+
     const input = document.getElementById('user-input');
     const text = input.value.trim();
     if (!text) return;
@@ -1294,8 +1511,10 @@
   document.getElementById('user-input').addEventListener('input', function () {
     this.style.height = 'auto';
     this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    updateSendButtonDisabled();
   });
 
+  updateSendButtonDisabled();
   startConversation();
 </script>
 </body>
