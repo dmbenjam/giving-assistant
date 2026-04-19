@@ -43,6 +43,10 @@
 
     html { scroll-behavior: smooth; }
 
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
     :root {
       --su-navy: #0D1B40;
       --su-orange: #F76900;
@@ -261,6 +265,71 @@
 
     .bg-gray { background: var(--section-gray); }
     .bg-white { background: var(--white); }
+
+    /* Scroll-reveal for key sections (see initSectionReveals) */
+    .section-reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.55s ease,
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .section-reveal.is-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .section-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    /* Fixed jump FAB — mirrors .btn-cta; visibility controlled by JS */
+    .fab-jump-chat {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      z-index: 90;
+      max-width: calc(100vw - 2.5rem);
+      opacity: 0;
+      transform: translateY(14px);
+      visibility: hidden;
+      pointer-events: none;
+      transition:
+        opacity 0.38s ease,
+        transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.38s;
+    }
+
+    .fab-jump-chat.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fab-jump-chat {
+        transition: opacity 0.25s ease;
+      }
+
+      .fab-jump-chat.is-visible {
+        transform: none;
+      }
+    }
+
+    .fab-jump-chat__link {
+      box-shadow: 0 6px 28px rgba(13, 27, 64, 0.22);
+      white-space: nowrap;
+    }
+
+    #try-giving-assistant {
+      scroll-margin-top: calc(var(--nav-h) + 0.75rem);
+    }
 
     /* Meeting the Moment — stats */
     .moment-body {
@@ -815,7 +884,7 @@
           Giving Assistant uses AI to match donors with Syracuse University funds that reflect their values, affiliations, and passions
           — making it easier than ever to find the right place for your gift.
         </p>
-        <a class="btn-cta" href="#try-giving-assistant">Explore Giving Assistant</a>
+        <a id="hero-cta" class="btn-cta" href="#try-giving-assistant">Explore Giving Assistant</a>
       </div>
       <div class="hero-mascot">
         <img
@@ -828,7 +897,7 @@
     </div>
   </section>
 
-  <section class="section bg-gray" aria-labelledby="moment-heading">
+  <section class="section bg-gray section-reveal" aria-labelledby="moment-heading">
     <div class="section-inner">
       <h2 id="moment-heading" class="section-heading centered">Meeting the Moment</h2>
       <h3 class="section-sub moment-sub">
@@ -859,7 +928,7 @@
     </div>
   </section>
 
-  <section class="section bg-white" aria-labelledby="features-heading">
+  <section class="section bg-white section-reveal" aria-labelledby="features-heading">
     <div class="section-inner">
       <h2 id="features-heading" class="section-heading centered">What Giving Assistant Does</h2>
       <div class="accordion" id="features-accordion">
@@ -927,14 +996,14 @@
     </div>
   </section>
 
-  <section id="try-giving-assistant" class="section bg-gray" aria-labelledby="chat-heading">
+  <section id="try-giving-assistant" class="section bg-gray section-reveal" aria-labelledby="chat-heading">
     <div class="section-inner">
       <div class="chat-section-intro">
         <h2 id="chat-heading" class="section-heading">Try It Yourself</h2>
         <h3 class="section-sub moment-sub">Start your conversation with Giving Assistant.</h3>
       </div>
 
-      <div class="chat-panel">
+      <div id="giving-assistant-chat-panel" class="chat-panel">
         <div class="chat-panel-header">
           <span>Giving Assistant</span>
         </div>
@@ -962,6 +1031,10 @@
   <footer class="site-footer">
     <p>Giving Assistant · A proposed addition to the Clementine platform · Syracuse University</p>
   </footer>
+
+  <div id="fab-jump-chat" class="fab-jump-chat" aria-hidden="true">
+    <a id="fab-jump-chat-link" class="btn-cta fab-jump-chat__link" href="#try-giving-assistant" tabindex="-1">Try Giving Assistant</a>
+  </div>
 
 <script>
   (function initStarfield() {
@@ -1173,6 +1246,108 @@
     }, { threshold: 0.45 });
 
     observer.observe(header);
+  })();
+
+  (function initSectionReveals() {
+    var sections = document.querySelectorAll('.section-reveal');
+    if (!sections.length) return;
+    if (!('IntersectionObserver' in window)) {
+      sections.forEach(function (s) {
+        s.classList.add('is-revealed');
+      });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-revealed');
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -28px 0px' });
+    sections.forEach(function (s) {
+      io.observe(s);
+    });
+  })();
+
+  (function initJumpToChatFab() {
+    var fab = document.getElementById('fab-jump-chat');
+    var fabLink = document.getElementById('fab-jump-chat-link');
+    var heroCta = document.getElementById('hero-cta');
+    var chatEmbed = document.getElementById('chat-window');
+    var chatHeading = document.getElementById('chat-heading');
+    var chatSection = document.getElementById('try-giving-assistant');
+    if (!fab || !fabLink || !heroCta || !chatEmbed) return;
+
+    var heroCtaInView = true;
+    var embedInView = false;
+
+    function updateFab() {
+      var show = !heroCtaInView && !embedInView;
+      fab.classList.toggle('is-visible', show);
+      fab.setAttribute('aria-hidden', show ? 'false' : 'true');
+      fabLink.setAttribute('tabindex', show ? '0' : '-1');
+    }
+
+    function computeFromRects() {
+      var vh = document.documentElement.clientHeight;
+      var vw = document.documentElement.clientWidth;
+      function anyOverlap(el) {
+        var r = el.getBoundingClientRect();
+        return r.bottom > 0 && r.top < vh && r.right > 0 && r.left < vw;
+      }
+      heroCtaInView = anyOverlap(heroCta);
+      embedInView = anyOverlap(chatEmbed);
+      updateFab();
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      fab.setAttribute('aria-hidden', 'true');
+      fabLink.setAttribute('tabindex', '-1');
+      return;
+    }
+
+    var ioOpts = { threshold: 0 };
+    var ctaObs = new IntersectionObserver(function (entries) {
+      var entry = entries[entries.length - 1];
+      if (!entry) return;
+      heroCtaInView = entry.isIntersecting;
+      updateFab();
+    }, ioOpts);
+    var embedObs = new IntersectionObserver(function (entries) {
+      var entry = entries[entries.length - 1];
+      if (!entry) return;
+      embedInView = entry.isIntersecting;
+      updateFab();
+    }, ioOpts);
+
+    ctaObs.observe(heroCta);
+    embedObs.observe(chatEmbed);
+
+    computeFromRects();
+    window.addEventListener('load', function () {
+      computeFromRects();
+      window.setTimeout(computeFromRects, 120);
+    });
+    window.addEventListener('hashchange', computeFromRects);
+    window.addEventListener('resize', computeFromRects);
+
+    fabLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (!chatSection) return;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      chatSection.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+      if (history.replaceState) {
+        history.replaceState(null, '', '#try-giving-assistant');
+      } else {
+        location.hash = 'try-giving-assistant';
+      }
+      var delay = reduced ? 80 : 480;
+      window.setTimeout(function () {
+        if (!chatHeading) return;
+        chatHeading.setAttribute('tabindex', '-1');
+        chatHeading.focus({ preventScroll: true });
+      }, delay);
+    });
   })();
 
   const MASCOT_SRC = 'assets/ClementineShadow.png';
